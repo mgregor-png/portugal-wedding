@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portugal Wedding — Trip Costs</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #faf8f4; color: #1c1c17; line-height: 1.6; padding-bottom: 40px; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; vertical-align: middle; }
+
+    header { background: linear-gradient(135deg, #1a3a5c 0%, #2d5a3a 100%); color: #fff; padding: 32px 20px 28px; }
+    header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+    .meta-strip { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+    .meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; opacity: 0.9; }
+
+    .content { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 0; margin: -20px 16px 0; position: relative; z-index: 1; }
+    .tab { flex: 1; text-align: center; padding: 14px 8px; font-size: 13px; font-weight: 700; border-radius: 12px 12px 0 0; cursor: pointer; transition: all 0.2s; background: #e8e5dd; color: #666; }
+    .tab.active { background: #faf8f4; color: #1c1c17; box-shadow: 0 -4px 12px rgba(0,0,0,0.06); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards */
+    .section-title { font-size: 18px; font-weight: 800; margin: 28px 0 16px; display: flex; align-items: center; gap: 8px; }
+    .section-title .material-symbols-outlined { font-size: 22px; color: #2d5a3a; }
+
+    .cost-card { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .cost-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .cost-card h3 .material-symbols-outlined { font-size: 18px; color: #2d5a3a; }
+
+    .cost-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .cost-row:not(:last-child) { border-bottom: 1px solid #f0ede6; }
+    .cost-label { font-size: 13px; color: #555; flex: 1; }
+    .cost-label small { display: block; font-size: 11px; color: #999; margin-top: 1px; }
+    .cost-value { font-size: 14px; font-weight: 700; text-align: right; white-space: nowrap; }
+    .cost-value small { font-size: 11px; color: #888; font-weight: 500; }
+
+    .total-row { background: #f0f7f0; border-radius: 12px; padding: 16px 20px; margin-top: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .total-row .label { font-size: 15px; font-weight: 800; color: #2d5a3a; }
+    .total-row .value { font-size: 22px; font-weight: 800; color: #2d5a3a; }
+    .total-row .value small { font-size: 13px; color: #666; font-weight: 600; display: block; text-align: right; }
+
+    /* Comparison */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+    .compare-card { background: #fff; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .compare-card.highlight { background: linear-gradient(135deg, #f0f7f0, #e8f0e8); }
+    .compare-card .price { font-size: 28px; font-weight: 800; color: #1c1c17; margin: 8px 0 2px; }
+    .compare-card .price-czk { font-size: 14px; color: #666; font-weight: 600; }
+    .compare-card .type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; }
+    .compare-card .desc { font-size: 12px; color: #888; margin-top: 8px; }
+
+    /* Tags */
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+    .tag-green { background: #e8f0e8; color: #2d5a3a; }
+    .tag-blue { background: #e0ecf4; color: #1a3a5c; }
+    .tag-orange { background: #fef3e0; color: #8a6a2a; }
+    .tag-red { background: #fde8e8; color: #8a2a2a; }
+
+    /* Tips */
+    .tip { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; display: flex; gap: 12px; align-items: flex-start; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+    .tip .material-symbols-outlined { font-size: 20px; color: #c45a3c; flex-shrink: 0; margin-top: 2px; }
+    .tip p { font-size: 13px; color: #555; }
+    .tip strong { color: #1c1c17; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: #e0ddd6; }
+    .tl-item { position: relative; padding-bottom: 20px; }
+    .tl-item::before { content: ''; position: absolute; left: -20px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #2d5a3a; border: 2px solid #faf8f4; }
+    .tl-item .day { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #c45a3c; }
+    .tl-item .event { font-size: 14px; font-weight: 600; color: #1c1c17; margin: 2px 0; }
+    .tl-item .detail { font-size: 12px; color: #888; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 32px 16px 16px; font-size: 11px; color: #bbb; }
+
+    @media (max-width: 480px) {
+        .compare-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Zambujeira do Mar 🇵🇹</h1>
+    <p>Friend's wedding — should we bring the whole family?</p>
+    <div class="meta-strip">
+        <div class="meta-item"><span class="material-symbols-outlined" style="font-size:16px">event</span> Mon May 11, 2026</div>
+        <div class="meta-item"><span class="material-symbols-outlined" style="font-size:16px">location_on</span> Alentejo Coast</div>
+        <div class="meta-item"><span class="material-symbols-outlined" style="font-size:16px">flight</span> Prague → Lisbon</div>
+        <div class="meta-item"><span class="material-symbols-outlined" style="font-size:16px">directions_car</span> 2h 40m drive</div>
+    </div>
+</header>
+
+<div class="content">
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('compare')">Overview</div>
+        <div class="tab" onclick="switchTab('family')">Family</div>
+        <div class="tab" onclick="switchTab('solo')">Solo</div>
+        <div class="tab" onclick="switchTab('plan')">Plan</div>
+    </div>
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div class="tab-panel active" id="tab-compare">
+
+        <div class="section-title"><span class="material-symbols-outlined">compare_arrows</span> Cost Comparison</div>
+
+        <div class="compare-grid">
+            <div class="compare-card">
+                <div class="type">Family Budget</div>
+                <div class="price">€1,310</div>
+                <div class="price-czk">32,750 Kč</div>
+                <div class="desc">easyJet · rental car · Airbnb · self-catering</div>
+            </div>
+            <div class="compare-card">
+                <div class="type">Family Comfortable</div>
+                <div class="price">€2,040</div>
+                <div class="price-czk">51,000 Kč</div>
+                <div class="desc">TAP · rental car · nice house · restaurants</div>
+            </div>
+            <div class="compare-card highlight">
+                <div class="type">Solo Budget ⭐</div>
+                <div class="price">€377</div>
+                <div class="price-czk">9,425 Kč</div>
+                <div class="desc">easyJet · bus · hostel · simple meals</div>
+            </div>
+            <div class="compare-card">
+                <div class="type">Solo Comfortable</div>
+                <div class="price">€820</div>
+                <div class="price-czk">20,500 Kč</div>
+                <div class="desc">TAP · rental car · guesthouse · eating out</div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">lightbulb</span> Key Takeaways</div>
+
+        <div class="tip"><span class="material-symbols-outlined">savings</span><p><strong>Solo is 3.5x cheaper</strong> than family. €377 vs €1,310 budget. The question is whether the family experience is worth €933 more.</p></div>
+        <div class="tip"><span class="material-symbols-outlined">flight</span><p><strong>Fly to Lisbon, not Faro.</strong> No useful direct PRG→FAO flights. Lisbon has daily directs (easyJet, TAP). Extra 1h driving is worth it.</p></div>
+        <div class="tip"><span class="material-symbols-outlined">hotel</span><p><strong>Book accommodation NOW.</strong> Zambujeira is tiny — wedding guests will compete for the few apartments/rooms available.</p></div>
+        <div class="tip"><span class="material-symbols-outlined">child_care</span><p><strong>Kids logistics:</strong> Bring your own car seat for Cyril (free check-in). Rent booster for Ruben. 2h40m drive is doable with a stop.</p></div>
+    </div>
+
+    <!-- ═══ FAMILY ═══ -->
+    <div class="tab-panel" id="tab-family">
+
+        <div class="section-title"><span class="material-symbols-outlined">flight</span> Flights</div>
+        <div class="cost-card" style="background:#f8f6f0">
+            <h3><span class="material-symbols-outlined">schedule</span> Direct flight schedule PRG↔LIS</h3>
+            <div class="cost-row">
+                <div class="cost-label"><strong>easyJet</strong> <span class="tag tag-green">Budget</span><small>~€150/adult RT</small></div>
+                <div class="cost-value" style="font-size:12px; font-weight:600">Tue · Thu · Sat</div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label"><strong>TAP Air Portugal</strong> <span class="tag tag-blue">Flag carrier</span><small>~€220/adult RT, bag included</small></div>
+                <div class="cost-value" style="font-size:12px; font-weight:600">Mon–Thu · Sat · Sun</div>
+            </div>
+            <div style="font-size:11px; color:#888; margin-top:8px">Best combo: <strong>Thu May 7 or Sat May 9</strong> out → <strong>Tue May 12</strong> back (both airlines available)</div>
+        </div>
+        <div class="cost-card">
+            <h3><span class="material-symbols-outlined">airline_seat_recline_normal</span> Prague → Lisbon return <span class="tag tag-green">easyJet</span></h3>
+            <div class="cost-row">
+                <div class="cost-label">2× adult round-trip</div>
+                <div class="cost-value">€300 <small>7,500 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">1× child (Ruben, 4yo) — full fare</div>
+                <div class="cost-value">€150 <small>3,750 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">1× infant lap (Cyril, 1yo)</div>
+                <div class="cost-value">€50 <small>1,250 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">2× checked bags (20 kg)<small>Needed for family luggage</small></div>
+                <div class="cost-value">€80 <small>2,000 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Stroller + car seat check-in<small>Free on easyJet (2 items per child)</small></div>
+                <div class="cost-value" style="color:#2d5a3a">FREE</div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">directions_car</span> Ground Transport</div>
+        <div class="cost-card">
+            <h3><span class="material-symbols-outlined">car_rental</span> Rental car — 4 days from Lisbon</h3>
+            <div class="cost-row">
+                <div class="cost-label">Intermediate car (4 days)<small>Golf/Focus size — fits family + luggage</small></div>
+                <div class="cost-value">€160 <small>4,000 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Child seats (booster for Ruben)<small>Bring own for Cyril</small></div>
+                <div class="cost-value">€25 <small>625 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Fuel (Lisbon↔Zambujeira ~440 km)</div>
+                <div class="cost-value">€35 <small>875 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Tolls (A2 motorway)<small>Electronic — confirm Via Verde at pickup</small></div>
+                <div class="cost-value">€18 <small>450 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Excess insurance (separate provider)<small>iCarhireinsurance.com — much cheaper</small></div>
+                <div class="cost-value">€12 <small>300 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">hotel</span> Accommodation — 3 nights</div>
+        <div class="cost-card">
+            <h3><span class="material-symbols-outlined">apartment</span> Airbnb apartment (2BR) <span class="tag tag-orange">Book now!</span></h3>
+            <div class="cost-row">
+                <div class="cost-label">3 nights × €80–140/night<small>Kitchen, space for kids, self-catering possible</small></div>
+                <div class="cost-value">€240–420 <small>6,000–10,500 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">restaurant</span> Food — 3 days</div>
+        <div class="cost-card">
+            <div class="cost-row">
+                <div class="cost-label">Budget (self-catering + some eating out)<small>€50–70/day for family of 4</small></div>
+                <div class="cost-value">€150–210 <small>3,750–5,250 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">more_horiz</span> Miscellaneous</div>
+        <div class="cost-card">
+            <div class="cost-row">
+                <div class="cost-label">Wedding gift</div>
+                <div class="cost-value">€50–100</div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Travel insurance (family)</div>
+                <div class="cost-value">€30–50</div>
+            </div>
+        </div>
+
+        <div class="total-row">
+            <div class="label">Total (budget)</div>
+            <div class="value">~€1,310 <small>~32,750 Kč</small></div>
+        </div>
+        <div class="total-row" style="background:#fff8f0; margin-top:8px">
+            <div class="label" style="color:#8a6a2a">Total (comfortable)</div>
+            <div class="value" style="color:#8a6a2a">~€2,040 <small>~51,000 Kč</small></div>
+        </div>
+    </div>
+
+    <!-- ═══ SOLO ═══ -->
+    <div class="tab-panel" id="tab-solo">
+
+        <div class="section-title"><span class="material-symbols-outlined">flight</span> Flights</div>
+        <div class="cost-card">
+            <h3><span class="material-symbols-outlined">airline_seat_recline_normal</span> Prague → Lisbon return <span class="tag tag-green">easyJet</span></h3>
+            <div class="cost-row">
+                <div class="cost-label">1× adult round-trip</div>
+                <div class="cost-value">€150 <small>3,750 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Checked bag (optional)<small>Can skip if packing light</small></div>
+                <div class="cost-value">€0–40 <small>0–1,000 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">directions_bus</span> Ground Transport</div>
+        <div class="cost-card">
+            <h3><span class="material-symbols-outlined">directions_bus</span> Bus — Rede Expressos <span class="tag tag-green">Cheapest</span></h3>
+            <div class="cost-row">
+                <div class="cost-label">Lisbon Sete Rios → Zambujeira return<small>~3h each way, 2-3 departures/day</small></div>
+                <div class="cost-value">€32 <small>800 Kč</small></div>
+            </div>
+        </div>
+        <div class="cost-card">
+            <h3><span class="material-symbols-outlined">car_rental</span> Or: Rental car (3 days) <span class="tag tag-blue">Flexible</span></h3>
+            <div class="cost-row">
+                <div class="cost-label">Compact car + fuel + tolls</div>
+                <div class="cost-value">€120–150 <small>3,000–3,750 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">hotel</span> Accommodation — 2-3 nights</div>
+        <div class="cost-card">
+            <div class="cost-row">
+                <div class="cost-label">Hostel (Hakuna Matata)<small>~€28/night, social, basic</small></div>
+                <div class="cost-value">€56–84 <small>1,400–2,100 Kč</small></div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Or: Guesthouse<small>~€45/night, private room</small></div>
+                <div class="cost-value">€90–135 <small>2,250–3,375 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">restaurant</span> Food</div>
+        <div class="cost-card">
+            <div class="cost-row">
+                <div class="cost-label">3 days (prato do dia + simple dinner)<small>€20–30/day — Alentejo is good value</small></div>
+                <div class="cost-value">€60–90 <small>1,500–2,250 Kč</small></div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">more_horiz</span> Miscellaneous</div>
+        <div class="cost-card">
+            <div class="cost-row">
+                <div class="cost-label">Wedding gift</div>
+                <div class="cost-value">€50</div>
+            </div>
+            <div class="cost-row">
+                <div class="cost-label">Travel insurance</div>
+                <div class="cost-value">€10</div>
+            </div>
+        </div>
+
+        <div class="total-row" style="background:linear-gradient(135deg, #f0f7f0, #e8f0e8);">
+            <div class="label">Total (budget + bus)</div>
+            <div class="value">~€377 <small>~9,425 Kč</small></div>
+        </div>
+        <div class="total-row" style="background:#fff8f0; margin-top:8px">
+            <div class="label" style="color:#8a6a2a">Total (comfortable + car)</div>
+            <div class="value" style="color:#8a6a2a">~€820 <small>~20,500 Kč</small></div>
+        </div>
+    </div>
+
+    <!-- ═══ PLAN ═══ -->
+    <div class="tab-panel" id="tab-plan">
+
+        <div class="section-title"><span class="material-symbols-outlined">route</span> Suggested Timeline</div>
+
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="day">Thu May 7 or Sat May 9</div>
+                <div class="event">Fly Prague → Lisbon</div>
+                <div class="detail">easyJet (Tue/Thu/Sat) or TAP (daily except Fri) · 3h 35m direct · Pick up rental car · Drive to Zambujeira (2h 40m)</div>
+            </div>
+            <div class="tl-item">
+                <div class="day">Fri May 8 – Sun May 10</div>
+                <div class="event">Free days — explore Alentejo</div>
+                <div class="detail">Zambujeira beach, Rota Vicentina trail, village restaurants · Relax before wedding</div>
+            </div>
+            <div class="tl-item">
+                <div class="day" style="color:#2d5a3a; font-size:13px">Mon May 11 — Wedding 💒</div>
+                <div class="event">Wedding day</div>
+                <div class="detail">The main event. Plan for kids' nap logistics if bringing family.</div>
+            </div>
+            <div class="tl-item">
+                <div class="day">Tue May 12</div>
+                <div class="event">Chill day + return</div>
+                <div class="detail">Morning at beach/village · Drive to Lisbon · Evening flight (easyJet + TAP fly Tue)</div>
+            </div>
+            <div class="tl-item">
+                <div class="day">Wed May 13 (backup)</div>
+                <div class="event">Morning flight home</div>
+                <div class="detail">If no evening flight on Tue — stay near Lisbon airport, fly Wed morning (TAP only, no easyJet)</div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="material-symbols-outlined">warning</span> Action Items</div>
+
+        <div class="tip"><span class="material-symbols-outlined">priority_high</span><p><strong>Book flights ASAP</strong> — PRG→LIS: easyJet flies Tue/Thu/Sat, TAP daily except Fri. Best outbound: <strong>Thu May 7</strong> (easyJet+TAP) or <strong>Sat May 9</strong> (easyJet+TAP). Return: <strong>Tue May 12</strong> (both airlines).</p></div>
+        <div class="tip"><span class="material-symbols-outlined">priority_high</span><p><strong>Book accommodation NOW</strong> — Zambujeira has very limited inventory. Search Airbnb + Booking.com for May 7/9–12.</p></div>
+        <div class="tip"><span class="material-symbols-outlined">check_circle</span><p><strong>Decide: family or solo?</strong> Main decision. Family = €1,310+ but shared experience. Solo = €377 and simpler.</p></div>
+        <div class="tip"><span class="material-symbols-outlined">check_circle</span><p><strong>Ask other guests</strong> — Anyone else flying from Prague? Share a rental car from Lisbon to save ~€100.</p></div>
+        <div class="tip"><span class="material-symbols-outlined">info</span><p><strong>Passport check</strong> — Ruben and Cyril need valid passports for Portugal (EU, so no visa needed from CZ).</p></div>
+        <div class="tip"><span class="material-symbols-outlined">warning</span><p><strong>No easyJet on Friday or Wednesday!</strong> If you fly Fri May 8 out or Wed May 13 back, only TAP is available (more expensive). Thu/Sat out + Tue back is the budget play.</p></div>
+
+        <div class="section-title"><span class="material-symbols-outlined">place</span> About Zambujeira do Mar</div>
+        <div class="cost-card">
+            <p style="font-size:13px; color:#555; margin-bottom:12px">Tiny fishing village on the dramatic Alentejo coast. Part of the Rota Vicentina hiking trail network. Famous for the Sudoeste Festival (not in May). Beautiful wild beaches, cliff walks, fresh seafood. May weather: 20–25°C, sunny.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:6px">
+                <span class="tag tag-blue">🏖️ Wild beaches</span>
+                <span class="tag tag-green">🥾 Rota Vicentina trails</span>
+                <span class="tag tag-orange">🦞 Fresh seafood</span>
+                <span class="tag tag-green">☀️ 20–25°C in May</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">Zambujeira do Mar Wedding · May 2026 · Costs are estimates based on typical May pricing</div>
+</div>
+
+<script>
+function switchTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+}
+</script>
+</body>
+</html>
